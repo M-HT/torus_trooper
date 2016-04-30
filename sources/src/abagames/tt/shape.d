@@ -123,7 +123,7 @@ public class ShipShape: Collidable, Drawable {
     sw *= 1.5f;
     float sd1 = rand.nextFloat(1) * PI / 3 + PI / 4;
     float sd2 = rand.nextFloat(1) * PI / 10;
-    int cl = rand.nextInt(Structure.COLOR_RGB.length - 2) + 2;
+    int cl = rand.nextInt(cast(int)(Structure.COLOR_RGB.length - 2)) + 2;
     color = cl;
     int shp = rand.nextInt(Structure.Shape.ROCKET);
     switch (shaftNum) {
@@ -161,7 +161,7 @@ public class ShipShape: Collidable, Drawable {
     sw *= 1.6f;
     float sd1 = rand.nextFloat(1) * PI / 3 + PI / 4;
     float sd2 = rand.nextFloat(1) * PI / 10;
-    int cl = rand.nextInt(Structure.COLOR_RGB.length - 2) + 2;
+    int cl = rand.nextInt(cast(int)(Structure.COLOR_RGB.length - 2)) + 2;
     color = cl;
     int shp = rand.nextInt(Structure.Shape.ROCKET);
     switch (shaftNum) {
@@ -208,7 +208,7 @@ public class ShipShape: Collidable, Drawable {
     sw *= 1.6f;
     float sd1 = rand.nextFloat(1) * PI / 3 + PI / 4;
     float sd2 = rand.nextFloat(1) * PI / 10;
-    int cl = rand.nextInt(Structure.COLOR_RGB.length - 2) + 2;
+    int cl = rand.nextInt(cast(int)(Structure.COLOR_RGB.length - 2)) + 2;
     color = cl;
     int shp = rand.nextInt(Structure.Shape.ROCKET);
     switch (shaftNum) {
@@ -260,7 +260,7 @@ public class ShipShape: Collidable, Drawable {
     st.pos.x = ox;
     st.pos.y = oy;
     st.d1 = st.d2 = 0;
-    st.width = rocketLength * 0.15;
+    st.width = rocketLength * 0.15f;
     st.height = rocketLength;
     st.shape = Structure.Shape.ROCKET;
     st.shapeXReverse = 1;
@@ -272,13 +272,15 @@ public class ShipShape: Collidable, Drawable {
       st.pos.x *= -1;
     sts ~= st;
     float wofs = offset;
-    float whgt = rocketLength * (rand.nextFloat(0.5) + 1.5);
+    float whgt = rocketLength * (rand.nextFloat(0.5) + 1.5f);
+    const float od1Sin = sin(od1);
+    const float od1Cos = cos(od1);
     for (int i = 0; i < wingNum; i++) {
       Structure st2 = new Structure;
-      st2.d1 = wingD1 * 180 / PI;
-      st2.d2 = wingD2 * 180 / PI;
-      st2.pos.x = ox + sin(od1) * wofs;
-      st2.pos.y = oy + cos(od1) * wofs;
+      st2.d1 = wingD1 * cast(float)(180 / PI);
+      st2.d2 = wingD2 * cast(float)(180 / PI);
+      st2.pos.x = ox + od1Sin * wofs;
+      st2.pos.y = oy + od1Cos * wofs;
       st2.width = wingWidth;
       st2.height = whgt;
       st2.shape = shp;
@@ -471,18 +473,22 @@ public class Structure {
     case Shape.ROCKET:
       for (int i = 0; i < 4; i++) {
         float d = i * PI / 2 + PI / 4;
+        const float dSinM = sin(d - 0.3f);
+        const float dCosM = cos(d - 0.3f);
+        const float dSinP = sin(d + 0.3f);
+        const float dCosP = cos(d + 0.3f);
         glBegin(GL_LINE_LOOP);
-        glVertex3f(sin(d - 0.3), cos(d - 0.3), -0.5);
-        glVertex3f(sin(d + 0.3), cos(d + 0.3), -0.5);
-        glVertex3f(sin(d + 0.3), cos(d + 0.3), 0.5);
-        glVertex3f(sin(d - 0.3), cos(d - 0.3), 0.5);
+        glVertex3f(dSinM, dCosM, -0.5);
+        glVertex3f(dSinP, dCosP, -0.5);
+        glVertex3f(dSinP, dCosP, 0.5);
+        glVertex3f(dSinM, dCosM, 0.5);
         glEnd();
         Screen.setColor(COLOR_RGB[color][0], COLOR_RGB[color][1], COLOR_RGB[color][2], alp);
         glBegin(GL_TRIANGLE_FAN);
-        glVertex3f(sin(d - 0.3), cos(d - 0.3), -0.5);
-        glVertex3f(sin(d + 0.3), cos(d + 0.3), -0.5);
-        glVertex3f(sin(d + 0.3), cos(d + 0.3), 0.5);
-        glVertex3f(sin(d - 0.3), cos(d - 0.3), 0.5);
+        glVertex3f(dSinM, dCosM, -0.5);
+        glVertex3f(dSinP, dCosP, -0.5);
+        glVertex3f(dSinP, dCosP, 0.5);
+        glVertex3f(dSinM, dCosM, 0.5);
         glEnd();
       }
       break;
@@ -506,34 +512,42 @@ public class BitShape: Drawable {
     displayList.beginNewList();
       for (int i = 0; i < 4; i++) {
         float d = i * PI / 2 + PI / 4;
+      const float dSinM1 = sin(d - 0.3f);
+      const float dCosM1 = cos(d - 0.3f);
+      const float dSinP1 = sin(d + 0.3f);
+      const float dCosP1 = cos(d + 0.3f);
         Screen.setColor(COLOR_RGB[0], COLOR_RGB[1], COLOR_RGB[2]);
         glBegin(GL_LINE_LOOP);
-        glVertex3f(sin(d - 0.3), -0.8, cos(d - 0.3));
-        glVertex3f(sin(d + 0.3), -0.8, cos(d + 0.3));
-        glVertex3f(sin(d + 0.3), 0.8, cos(d + 0.3));
-        glVertex3f(sin(d - 0.3), 0.8, cos(d - 0.3));
+        glVertex3f(dSinM1, -0.8, dCosM1);
+        glVertex3f(dSinP1, -0.8, dCosP1);
+        glVertex3f(dSinP1, 0.8, dCosP1);
+        glVertex3f(dSinM1, 0.8, dCosM1);
         glEnd();
         d += PI / 4;
+        const float dSinM2 = sin(d - 0.3f);
+        const float dCosM2 = cos(d - 0.3f);
+        const float dSinP2 = sin(d + 0.3f);
+        const float dCosP2 = cos(d + 0.3f);
         glBegin(GL_LINE_LOOP);
-        glVertex3f(sin(d - 0.3) * 2, -0.2, cos(d - 0.3) * 2);
-        glVertex3f(sin(d + 0.3) * 2, -0.2, cos(d + 0.3) * 2);
-        glVertex3f(sin(d + 0.3) * 2, 0.2, cos(d + 0.3) * 2);
-        glVertex3f(sin(d - 0.3) * 2, 0.2, cos(d - 0.3) * 2);
+        glVertex3f(dSinM2 * 2, -0.2, dCosM2 * 2);
+        glVertex3f(dSinP2 * 2, -0.2, dCosP2 * 2);
+        glVertex3f(dSinP2 * 2, 0.2, dCosP2 * 2);
+        glVertex3f(dSinM2 * 2, 0.2, dCosM2 * 2);
         glEnd();
         d -= PI / 4;
         Screen.setColor(COLOR_RGB[0], COLOR_RGB[1], COLOR_RGB[2], 0.5);
         glBegin(GL_TRIANGLE_FAN);
-        glVertex3f(sin(d - 0.3), -0.8, cos(d - 0.3));
-        glVertex3f(sin(d + 0.3), -0.8, cos(d + 0.3));
-        glVertex3f(sin(d + 0.3), 0.8, cos(d + 0.3));
-        glVertex3f(sin(d - 0.3), 0.8, cos(d - 0.3));
+        glVertex3f(dSinM1, -0.8, dCosM1);
+        glVertex3f(dSinP1, -0.8, dCosP1);
+        glVertex3f(dSinP1, 0.8, dCosP1);
+        glVertex3f(dSinM1, 0.8, dCosM1);
         glEnd();
         d += PI / 4;
         glBegin(GL_TRIANGLE_FAN);
-        glVertex3f(sin(d - 0.3) * 2, -0.2, cos(d - 0.3) * 2);
-        glVertex3f(sin(d + 0.3) * 2, -0.2, cos(d + 0.3) * 2);
-        glVertex3f(sin(d + 0.3) * 2, 0.2, cos(d + 0.3) * 2);
-        glVertex3f(sin(d - 0.3) * 2, 0.2, cos(d - 0.3) * 2);
+        glVertex3f(dSinM2 * 2, -0.2, dCosM2 * 2);
+        glVertex3f(dSinP2 * 2, -0.2, dCosP2 * 2);
+        glVertex3f(dSinP2 * 2, 0.2, dCosP2 * 2);
+        glVertex3f(dSinM2 * 2, 0.2, dCosM2 * 2);
         glEnd();
       }
     displayList.endNewList();
@@ -607,11 +621,15 @@ public class BulletShape: Drawable {
       float d = PI * 2 / 3 * i;
       p1.x = p1.y = 0;
       p1.z = 2.5f;
-      p2.x = sin(d) * 1.8f;
-      p2.y = cos(d) * 1.8f;
+      const float dSin1 = sin(d);
+      const float dCos1 = cos(d);
+      p2.x = dSin1 * 1.8f;
+      p2.y = dCos1 * 1.8f;
       p2.z = -1.2f;
-      p3.x = sin(d + PI * 2 / 3) * 1.2f;
-      p3.y = cos(d + PI * 2 / 3) * 1.2f;
+      const float dSin2 = sin(d + cast(float)(PI * 2 / 3));
+      const float dCos2 = cos(d + cast(float)(PI * 2 / 3));
+      p3.x = dSin2 * 1.2f;
+      p3.y = dCos2 * 1.2f;
       p3.z = -1.2f;
       cp.x = cp.y = cp.z = 0;
       cp += p1;
@@ -753,35 +771,39 @@ public class ShotShape: Collidable, Drawable {
     if (charge) {
       for (int i = 0; i < 8; i++) {
         float d = i * PI / 4;
+        const float dSin = sin(d);
+        const float dCos = cos(d);
         glBegin(GL_TRIANGLES);
         Screen.setColor(COLOR_RGB[0], COLOR_RGB[1], COLOR_RGB[2]);
-        glVertex3f(sin(d) * 0.1, cos(d) * 0.1, 0.2);
-        glVertex3f(sin(d) * 0.5, cos(d) * 0.5, 0.5);
+        glVertex3f(dSin * 0.1, dCos * 0.1, 0.2);
+        glVertex3f(dSin * 0.5, dCos * 0.5, 0.5);
         Screen.setColor(COLOR_RGB[0] * 0.2, COLOR_RGB[1] * 0.2, COLOR_RGB[2] * 0.2);
-        glVertex3f(sin(d) * 1.0, cos(d) * 1.0, -0.7);
+        glVertex3f(dSin * 1.0, dCos * 1.0, -0.7);
         glEnd();
         Screen.setColor(COLOR_RGB[0], COLOR_RGB[1], COLOR_RGB[2]);
         glBegin(GL_LINE_LOOP);
-        glVertex3f(sin(d) * 0.1, cos(d) * 0.1, 0.2);
-        glVertex3f(sin(d) * 0.5, cos(d) * 0.5, 0.5);
-        glVertex3f(sin(d) * 1.0, cos(d) * 1.0, -0.7);
+        glVertex3f(dSin * 0.1, dCos * 0.1, 0.2);
+        glVertex3f(dSin * 0.5, dCos * 0.5, 0.5);
+        glVertex3f(dSin * 1.0, dCos * 1.0, -0.7);
         glEnd();
       }
     } else {
       for (int i = 0; i < 4; i++) {
         float d = i * PI / 2;
+        const float dSin = sin(d);
+        const float dCos = cos(d);
         glBegin(GL_TRIANGLES);
         Screen.setColor(COLOR_RGB[0], COLOR_RGB[1], COLOR_RGB[2]);
-        glVertex3f(sin(d) * 0.1, cos(d) * 0.1, 0.4);
-        glVertex3f(sin(d) * 0.3, cos(d) * 0.3, 1.0);
+        glVertex3f(dSin * 0.1, dCos * 0.1, 0.4);
+        glVertex3f(dSin * 0.3, dCos * 0.3, 1.0);
         Screen.setColor(COLOR_RGB[0] * 0.2, COLOR_RGB[1] * 0.2, COLOR_RGB[2] * 0.2);
-        glVertex3f(sin(d) * 0.5, cos(d) * 0.5, -1.4);
+        glVertex3f(dSin * 0.5, dCos * 0.5, -1.4);
         glEnd();
         Screen.setColor(COLOR_RGB[0], COLOR_RGB[1], COLOR_RGB[2]);
         glBegin(GL_LINE_LOOP);
-        glVertex3f(sin(d) * 0.1, cos(d) * 0.1, 0.4);
-        glVertex3f(sin(d) * 0.3, cos(d) * 0.3, 1.0);
-        glVertex3f(sin(d) * 0.5, cos(d) * 0.5, -1.4);
+        glVertex3f(dSin * 0.1, dCos * 0.1, 0.4);
+        glVertex3f(dSin * 0.3, dCos * 0.3, 1.0);
+        glVertex3f(dSin * 0.5, dCos * 0.5, -1.4);
         glEnd();
       }
     }

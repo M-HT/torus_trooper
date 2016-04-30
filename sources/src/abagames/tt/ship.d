@@ -461,9 +461,11 @@ public class Ship: BulletTarget {
       ly += my;
       lz += mz;
     }
+    const float degSin = sin(deg);
+    const float degCos = cos(deg);
     gluLookAt(ex, ey, ez,
 	      lx, ly, lz,
-	      sin(deg), -cos(deg) , 0);
+	      degSin, -degCos , 0);
   }
 
   public void setScreenShake(int cnt, float its) {

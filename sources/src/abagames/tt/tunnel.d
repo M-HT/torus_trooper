@@ -973,11 +973,15 @@ public class Ring {
   private void drawRing(float r, float rr1, float rr2, int num) {
     float d = 0, md = 0.2;
     for (int i = 0; i < num; i++) {
+      const float dSin = sin(d);
+      const float dCos = cos(d);
       glBegin(GL_LINE_LOOP);
-      scope Vector3 p1 = new Vector3(sin(d) * r * rr1, cos(d) * r * rr1, 0);
-      scope Vector3 p2 = new Vector3(sin(d) * r * rr2, cos(d) * r * rr2, 0);
-      scope Vector3 p3 = new Vector3(sin(d + md) * r * rr2, cos(d + md) * r * rr2, 0);
-      scope Vector3 p4 = new Vector3(sin(d + md) * r * rr1, cos(d + md) * r * rr1, 0);
+      scope Vector3 p1 = new Vector3(dSin * r * rr1, dCos * r * rr1, 0);
+      scope Vector3 p2 = new Vector3(dSin * r * rr2, dCos * r * rr2, 0);
+      const float dmdSin = sin(d + md);
+      const float dmdCos = cos(d + md);
+      scope Vector3 p3 = new Vector3(dmdSin * r * rr2, dmdCos * r * rr2, 0);
+      scope Vector3 p4 = new Vector3(dmdSin * r * rr1, dmdCos * r * rr1, 0);
       scope Vector3 cp = new Vector3;
       cp += p1;
       cp += p2;

@@ -69,8 +69,10 @@ public class Particle: LuminousActor {
     pos.y = p.y;
     pos.z = z;
     float sb = rand.nextFloat(0.8) + 0.4;
-    vel.x = sin(d) * speed * sb;
-    vel.y = cos(d) * speed * sb;
+    const float dSin = sin(d);
+    const float dCos = cos(d);
+    vel.x = dSin * speed * sb;
+    vel.y = dCos * speed * sb;
     vel.z = mz;
     this.r = r;
     this.g = g;

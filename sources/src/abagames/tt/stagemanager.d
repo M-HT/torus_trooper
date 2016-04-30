@@ -176,16 +176,16 @@ public class StageManager {
       } else {
         Slice.darkLineRatio -= 1.0f / TUNNEL_COLOR_CHANGE_INTERVAL;
         float cRatio = cast(float) tunnelColorChangeCnt / TUNNEL_COLOR_CHANGE_INTERVAL;
-        int cpIdxPrev = (tunnelColorPolyIdx - 1) % TUNNEL_COLOR_PATTERN_POLY.length;
-        int cpIdxNow = tunnelColorPolyIdx % TUNNEL_COLOR_PATTERN_POLY.length;
+        int cpIdxPrev = (tunnelColorPolyIdx - 1) % cast(int)(TUNNEL_COLOR_PATTERN_POLY.length);
+        int cpIdxNow = tunnelColorPolyIdx % cast(int)(TUNNEL_COLOR_PATTERN_POLY.length);
         Slice.polyR = TUNNEL_COLOR_PATTERN_POLY[cpIdxPrev][0] * cRatio +
           TUNNEL_COLOR_PATTERN_POLY[cpIdxNow][0] * (1 - cRatio);
         Slice.polyG = TUNNEL_COLOR_PATTERN_POLY[cpIdxPrev][1] * cRatio +
           TUNNEL_COLOR_PATTERN_POLY[cpIdxNow][1] * (1 - cRatio);
         Slice.polyB = TUNNEL_COLOR_PATTERN_POLY[cpIdxPrev][2] * cRatio +
           TUNNEL_COLOR_PATTERN_POLY[cpIdxNow][2] * (1 - cRatio);
-        int clIdxPrev = (tunnelColorLineIdx - 1) % TUNNEL_COLOR_PATTERN_LINE.length;
-        int clIdxNow = tunnelColorLineIdx % TUNNEL_COLOR_PATTERN_LINE.length;
+        int clIdxPrev = (tunnelColorLineIdx - 1) % cast(int)(TUNNEL_COLOR_PATTERN_LINE.length);
+        int clIdxNow = tunnelColorLineIdx % cast(int)(TUNNEL_COLOR_PATTERN_LINE.length);
         Slice.lineR = TUNNEL_COLOR_PATTERN_LINE[clIdxPrev][0] * cRatio +
           TUNNEL_COLOR_PATTERN_LINE[clIdxNow][0] * (1 - cRatio);
         Slice.lineG = TUNNEL_COLOR_PATTERN_LINE[clIdxPrev][1] * cRatio +
@@ -530,9 +530,11 @@ public class ShipSpec {
     case BitType.ROUND:
       float od = PI * 2 / bitNum;
       float d = od * idx + cnt * bitMd;
-      ofs.x = bitDistance * 2 * sin(d);
-      ofs.y = bitDistance * 2 * cos(d) * 5;
-      deg = PI - sin(d) * 0.05f;
+      const float dSin = sin(d);
+      const float dCos = cos(d);
+      ofs.x = bitDistance * 2 * dSin;
+      ofs.y = bitDistance * 2 * dCos * 5;
+      deg = PI - dSin * 0.05f;
       break;
     case BitType.LINE:
       float of = (idx % 2) * 2 - 1;

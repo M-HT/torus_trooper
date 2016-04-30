@@ -197,7 +197,8 @@ public class TitleManager {
     glPushMatrix();
     glTranslatef(3 - _replayChangeRatio * 2.4f, 1.8f, 3.5f - _replayChangeRatio * 1.5f);
     glRotatef(30, 1, 0, 0);
-    glRotatef(sin(cnt * 0.005f) * 12, 0, 1, 0);
+    const float cntSin = sin(cnt * 0.005f);
+    glRotatef(cntSin * 12, 0, 1, 0);
     glRotatef(cnt * 0.2f, 0, 0, 1);
     glDisable(GL_BLEND);
     Screen.setColor(0, 0, 0);
@@ -270,7 +271,8 @@ public class TitleManager {
     Letter.drawNum(gd.endLevel, 453, 54, 5);
     Letter.drawString("-", 423, 54, 5);
     calcCursorPos(cx, cy, grade, level);
-    drawCursorRing(cx, cy, 18 + sin(cnt * 0.1f) * 3);
+    const float cntSin = sin(cnt * 0.1f);
+    drawCursorRing(cx, cy, 18 + cntSin * 3);
   }
 
   private void calcCursorPos(ref float x, ref float y, int gd, int lv) {
@@ -302,16 +304,24 @@ public class TitleManager {
     float d1 = 0;
     for (int i = 0; i < 32; i++, d1 += PI * 2 / 32) {
       float d2 = 0;
+      const float d1Sin0 = sin(d1);
+      const float d1Cos0 = cos(d1);
+      const float d1Sin0TR = d1Sin0 * torusRad;
+      const float d1Cos0TR = d1Cos0 * torusRad;
+      const float d1Sin1 = sin(d1 + cast(float)(PI * 2 / 32));
+      const float d1Cos1 = cos(d1 + cast(float)(PI * 2 / 32));
+      const float d1Sin1TR = d1Sin1 * torusRad;
+      const float d1Cos1TR = d1Cos1 * torusRad;
       for (int j = 0; j < 16; j++, d2 += PI * 2 / 16) {
-        cp.x = sin(d1) * torusRad;
-        cp.y = cos(d1) * torusRad;
+        cp.x = d1Sin0TR;
+        cp.y = d1Cos0TR;
         glBegin(GL_LINE_STRIP);
         createRingOffset(ringOfs, cp, ringRad, d1, d2);
         Screen.glVertex(ringOfs);
         createRingOffset(ringOfs, cp, ringRad, d1, d2 + PI * 2 / 16);
         Screen.glVertex(ringOfs);
-        cp.x = sin(d1 + PI * 2 / 32) * torusRad;
-        cp.y = cos(d1 + PI * 2 / 32) * torusRad;
+        cp.x = d1Sin1TR;
+        cp.y = d1Cos1TR;
         createRingOffset(ringOfs, cp, ringRad, d1 + PI * 2 / 32, d2 + PI * 2 / 16);
         Screen.glVertex(ringOfs);
         glEnd();
@@ -321,31 +331,43 @@ public class TitleManager {
     d1 = 0;
     glBegin(GL_QUADS);
     for (int i = 0; i < 32; i++, d1 += PI * 2 / 32) {
-      cp.x = sin(d1) * (torusRad + ringRad);
-      cp.y = cos(d1) * (torusRad + ringRad);
+      const float d1Sin0 = sin(d1);
+      const float d1Cos0 = cos(d1);
+      cp.x = d1Sin0 * (torusRad + ringRad);
+      cp.y = d1Cos0 * (torusRad + ringRad);
       Screen.glVertex(cp);
-      cp.x = sin(d1) * (torusRad + ringRad * 10);
-      cp.y = cos(d1) * (torusRad + ringRad * 10);
+      cp.x = d1Sin0 * (torusRad + ringRad * 10);
+      cp.y = d1Cos0 * (torusRad + ringRad * 10);
       Screen.glVertex(cp);
-      cp.x = sin(d1 + PI * 2 / 32) * (torusRad + ringRad * 10);
-      cp.y = cos(d1 + PI * 2 / 32) * (torusRad + ringRad * 10);
+      const float d1Sin1 = sin(d1 + cast(float)(PI * 2 / 32));
+      const float d1Cos1 = cos(d1 + cast(float)(PI * 2 / 32));
+      cp.x = d1Sin1 * (torusRad + ringRad * 10);
+      cp.y = d1Cos1 * (torusRad + ringRad * 10);
       Screen.glVertex(cp);
-      cp.x = sin(d1 + PI * 2 / 32) * (torusRad + ringRad);
-      cp.y = cos(d1 + PI * 2 / 32) * (torusRad + ringRad);
+      cp.x = d1Sin1 * (torusRad + ringRad);
+      cp.y = d1Cos1 * (torusRad + ringRad);
       Screen.glVertex(cp);
     }
     d1 = 0;
     for (int i = 0; i < 32; i++, d1 += PI * 2 / 32) {
       float d2 = 0;
+      const float d1Sin0 = sin(d1);
+      const float d1Cos0 = cos(d1);
+      const float d1Sin0TR = d1Sin0 * torusRad;
+      const float d1Cos0TR = d1Cos0 * torusRad;
+      const float d1Sin1 = sin(d1 + cast(float)(PI * 2 / 32));
+      const float d1Cos1 = cos(d1 + cast(float)(PI * 2 / 32));
+      const float d1Sin1TR = d1Sin1 * torusRad;
+      const float d1Cos1TR = d1Cos1 * torusRad;
       for (int j = 0; j < 16; j++, d2 += PI * 2 / 16) {
-        cp.x = sin(d1) * torusRad;
-        cp.y = cos(d1) * torusRad;
+        cp.x = d1Sin0TR;
+        cp.y = d1Cos0TR;
         createRingOffset(ringOfs, cp, ringRad, d1, d2);
         Screen.glVertex(ringOfs);
         createRingOffset(ringOfs, cp, ringRad, d1, d2 + PI * 2 / 16);
         Screen.glVertex(ringOfs);
-        cp.x = sin(d1 + PI * 2 / 32) * torusRad;
-        cp.y = cos(d1 + PI * 2 / 32) * torusRad;
+        cp.x = d1Sin1TR;
+        cp.y = d1Cos1TR;
         createRingOffset(ringOfs, cp, ringRad, d1 + PI * 2 / 32, d2 + PI * 2 / 16);
         Screen.glVertex(ringOfs);
         createRingOffset(ringOfs, cp, ringRad, d1 + PI * 2 / 32, d2);

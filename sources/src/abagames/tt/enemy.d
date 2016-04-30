@@ -191,8 +191,10 @@ public class Enemy: Actor {
         float oy = ppos.y;
         float od = atan2(ox, oy);
         flipMvCnt = 48;
-        flipMv.x = sin(od) * ship.speed * 0.4;
-        flipMv.y = cos(od) * ship.speed * 7;
+        const float odSin = sin(od);
+        const float odCos = cos(od);
+        flipMv.x = odSin * ship.speed * 0.4;
+        flipMv.y = odCos * ship.speed * 7;
       }
     }
     Slice sl = tunnel.getSlice(pos.y);

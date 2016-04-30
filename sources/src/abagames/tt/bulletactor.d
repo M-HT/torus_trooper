@@ -177,22 +177,26 @@ public class BulletActor: Actor {
       removeForced();
       return;
      }
+    const float degSin = sin(bullet.deg);
+    const float degCos = cos(bullet.deg);
     float mx =
-      (sin(bullet.deg) * bullet.speed + bullet.acc.x) *
+      (degSin * bullet.speed + bullet.acc.x) *
         bullet.getSpeedRank() * bullet.xReverse;
     float my =
-      (cos(bullet.deg) * bullet.speed - bullet.acc.y) *
+      (degCos * bullet.speed - bullet.acc.y) *
         bullet.getSpeedRank() * bullet.yReverse;
     float d = atan2(mx, my);
-    float r = 1 - fabs(sin(d)) * 0.999f;
+    const float dSin = sin(d);
+    const float dSinAbs = fabs(dSin);
+    float r = 1 - dSinAbs * 0.999f;
     r *= (ship.speed * 5);
     bullet.pos.x += mx * r;
     bullet.pos.y += my * r;
 
-    if (bullet.pos.x >= PI * 2)
-      bullet.pos.x -= PI * 2;
+    if (bullet.pos.x >= cast(float)(PI * 2))
+      bullet.pos.x -= cast(float)(PI * 2);
     else if (bullet.pos.x < 0)
-      bullet.pos.x += PI * 2;
+      bullet.pos.x += cast(float)(PI * 2);
     if (isVisible && disapCnt <= 0) {
       if (ship.checkBulletHit(bullet.pos, ppos))
         removeForced();
