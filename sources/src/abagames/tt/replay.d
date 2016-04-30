@@ -5,7 +5,7 @@
  */
 module abagames.tt.replay;
 
-private import std.stream;
+private import std.stdio;
 private import abagames.util.sdl.recordablepad;
 
 /**
@@ -13,7 +13,7 @@ private import abagames.util.sdl.recordablepad;
  */
 public class ReplayData {
  public:
-  static const char[] dir = "replay";
+  static string dir = "replay";
   static const int VERSION_NUM = 20;
   PadRecord padRecord;
   float level;
@@ -21,27 +21,37 @@ public class ReplayData {
   long seed;
  private:
 
-  public void save(char[] fileName) {
-    auto File fd = new File;
-    fd.create(dir ~ "/" ~ fileName);
-    fd.write(VERSION_NUM);
-    fd.write(level);
-    fd.write(grade);
-    fd.write(seed);
+  public void save(string fileName) {
+    scope File fd;
+    fd.open(dir ~ "/" ~ fileName, "wb");
+    int write_data[1] = [VERSION_NUM];
+    float write_data2[1] = [level];
+    int write_data3[1] = [grade];
+    long write_data4[1] = [seed];
+    fd.rawWrite(write_data);
+    fd.rawWrite(write_data2);
+    fd.rawWrite(write_data3);
+    fd.rawWrite(write_data4);
     padRecord.save(fd);
     fd.close();
   }
 
-  public void load(char[] fileName) {
-    auto File fd = new File;
+  public void load(string fileName) {
+    scope File fd;
     fd.open(dir ~ "/" ~ fileName);
-    int ver;
-    fd.read(ver);
-    if (ver != VERSION_NUM)
-      throw new Error("Wrong version num");
-    fd.read(level);
-    fd.read(grade);
-    fd.read(seed);
+    int read_data[1];
+    fd.rawRead(read_data);
+    if (read_data[0] != VERSION_NUM)
+      throw new Exception("Wrong version num");
+    float read_data2[1];
+    int read_data3[1];
+    long read_data4[1];
+    fd.rawRead(read_data2);
+    fd.rawRead(read_data3);
+    fd.rawRead(read_data4);
+    level = read_data2[0];
+    grade = read_data3[0];
+    seed = read_data4[0];
     padRecord = new PadRecord;
     padRecord.load(fd);
     fd.close();

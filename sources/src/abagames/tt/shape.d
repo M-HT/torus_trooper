@@ -66,10 +66,10 @@ public class ShipShape: Collidable, Drawable {
   Vector rocketPos, fragmentPos;
   int color;
 
-  static this() {
+  public static void initRand() {
     rand = new Rand;
   }
-  
+
   public this(long randSeed) {
     rand.setSeed(randSeed);
   }
@@ -92,6 +92,8 @@ public class ShipShape: Collidable, Drawable {
       break;
     case Type.LARGE:
       createLargeType(damaged);
+      break;
+    default:
       break;
     }
     createDisplayList();
@@ -139,6 +141,8 @@ public class ShipShape: Collidable, Drawable {
       rocketX ~= sx * 0.05;
       rocketX ~= -sx * 0.05;
       break;
+    default:
+      break;
     }
     _collision.x *= 0.1;
     _collision.y *= 1.2;
@@ -183,6 +187,8 @@ public class ShipShape: Collidable, Drawable {
       rocketX ~= -sx * 0.025;
       rocketX ~= sx * 0.05;
       rocketX ~= -sx * 0.05;
+      break;
+    default:
       break;
     }
     _collision.x *= 0.1;
@@ -237,6 +243,8 @@ public class ShipShape: Collidable, Drawable {
       rocketX ~= sx * 0.05;
       rocketX ~= -sx * 0.05;
       break;
+    default:
+      break;
     }
     _collision.x *= 0.1;
     _collision.y *= 1.2;
@@ -266,26 +274,26 @@ public class ShipShape: Collidable, Drawable {
     float wofs = offset;
     float whgt = rocketLength * (rand.nextFloat(0.5) + 1.5);
     for (int i = 0; i < wingNum; i++) {
-      Structure st = new Structure;
-      st.d1 = wingD1 * 180 / PI;
-      st.d2 = wingD2 * 180 / PI;
-      st.pos.x = ox + sin(od1) * wofs;
-      st.pos.y = oy + cos(od1) * wofs;
-      st.width = wingWidth;
-      st.height = whgt;
-      st.shape = shp;
-      st.divNum = divNum;
-      st.shapeXReverse = 1;
+      Structure st2 = new Structure;
+      st2.d1 = wingD1 * 180 / PI;
+      st2.d2 = wingD2 * 180 / PI;
+      st2.pos.x = ox + sin(od1) * wofs;
+      st2.pos.y = oy + cos(od1) * wofs;
+      st2.width = wingWidth;
+      st2.height = whgt;
+      st2.shape = shp;
+      st2.divNum = divNum;
+      st2.shapeXReverse = 1;
       if (!damaged)
-        st.color = color;
+        st2.color = color;
       else
-        st.color = 0;
+        st2.color = 0;
       if ((((i % 2) * 2) - 1) * rev == 1) {
-        st.pos.x *= -1;
-        st.d1 *= -1;
-        st.shapeXReverse *= -1;
+        st2.pos.x *= -1;
+        st2.d1 *= -1;
+        st2.shapeXReverse *= -1;
       }
-      sts ~= st;
+      sts ~= st2;
     }
     return sts;
   }
@@ -478,6 +486,8 @@ public class Structure {
         glEnd();
       }
       break;
+    default:
+      break;
     }
     glPopMatrix();
   }
@@ -575,6 +585,8 @@ public class BulletShape: Drawable {
     case 5:
       createBarShape(true);
       break;
+    default:
+      break;
     }
     displayList.endNewList();
   }
@@ -584,13 +596,13 @@ public class BulletShape: Drawable {
   }
 
   private void createTriangleShape(bool wireShape) {
-    auto Vector3 cp = new Vector3;
-    auto Vector3 p1 = new Vector3;
-    auto Vector3 p2 = new Vector3;
-    auto Vector3 p3 = new Vector3;
-    auto Vector3 np1 = new Vector3;
-    auto Vector3 np2 = new Vector3;
-    auto Vector3 np3 = new Vector3;
+    scope Vector3 cp = new Vector3;
+    scope Vector3 p1 = new Vector3;
+    scope Vector3 p2 = new Vector3;
+    scope Vector3 p3 = new Vector3;
+    scope Vector3 np1 = new Vector3;
+    scope Vector3 np2 = new Vector3;
+    scope Vector3 np3 = new Vector3;
     for (int i = 0; i < 3; i++) {
       float d = PI * 2 / 3 * i;
       p1.x = p1.y = 0;
@@ -631,9 +643,9 @@ public class BulletShape: Drawable {
   }
 
   private void createSquareShape(bool wireShape) {
-    auto Vector3 cp = new Vector3;
-    auto Vector3[] p = new Vector3[4];
-    auto Vector3[] np = new Vector3[4];
+    scope Vector3 cp = new Vector3;
+    scope Vector3[] p = new Vector3[4];
+    scope Vector3[] np = new Vector3[4];
     static const float[][][] POINT_DAT = [
       [[-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1], ],
       [[-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1], ],
@@ -642,9 +654,9 @@ public class BulletShape: Drawable {
       [[1, -1, -1], [1, -1, 1], [1, 1, 1], [1, 1, -1], ],
       [[-1, -1, -1], [-1, -1, 1], [-1, 1, 1], [-1, 1, -1], ],
     ];
-    foreach (inout Vector3 ip; p)
+    foreach (ref Vector3 ip; p)
       ip = new Vector3;
-    foreach (inout Vector3 inp; np)
+    foreach (ref Vector3 inp; np)
       inp = new Vector3;
     for (int i = 0; i < 6; i++) {
       cp.x = cp.y = cp.z = 0;
@@ -676,9 +688,9 @@ public class BulletShape: Drawable {
   }
 
   private void createBarShape(bool wireShape) {
-    auto Vector3 cp = new Vector3;
-    auto Vector3[] p = new Vector3[4];
-    auto Vector3[] np = new Vector3[4];
+    scope Vector3 cp = new Vector3;
+    scope Vector3[] p = new Vector3[4];
+    scope Vector3[] np = new Vector3[4];
     static const float[][][] POINT_DAT = [
       [[-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1], ],
       //[[-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1], ],
@@ -687,9 +699,9 @@ public class BulletShape: Drawable {
       [[1, -1, -1], [1, -1, 1], [1, 1, 1], [1, 1, -1], ],
       [[-1, -1, -1], [-1, -1, 1], [-1, 1, 1], [-1, 1, -1], ],
     ];
-    foreach (inout Vector3 ip; p)
+    foreach (ref Vector3 ip; p)
       ip = new Vector3;
-    foreach (inout Vector3 inp; np)
+    foreach (ref Vector3 inp; np)
       inp = new Vector3;
     for (int i = 0; i < 5; i++) {
       cp.x = cp.y = cp.z = 0;
@@ -809,7 +821,7 @@ public class ResizableDrawable: Collidable, Drawable {
     _collision = new Vector;
     return _shape = v;
   }
-  
+
   public float size(float v) {
     return _size = v;
   }

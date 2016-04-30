@@ -5,7 +5,7 @@
  */
 module abagames.tt.prefmanager;
 
-private import std.stream;
+private import std.stdio;
 private import abagames.util.prefmanager;
 private import abagames.tt.ship;
 
@@ -15,7 +15,7 @@ private import abagames.tt.ship;
 public class PrefManager: abagames.util.prefmanager.PrefManager {
  private:
   static const int VERSION_NUM = 10;
-  static const char[] PREF_FILE = "tt.prf";
+  static string PREF_FILE = "tt.prf";
   PrefData _prefData;
 
   public this() {
@@ -23,28 +23,31 @@ public class PrefManager: abagames.util.prefmanager.PrefManager {
   }
 
   public void load() {
-    auto File fd = new File;
+    scope File fd;
     try {
-      int ver;
+      int read_data[1];
       fd.open(PREF_FILE);
-      fd.read(ver);
-      if (ver != VERSION_NUM)
-        throw new Error("Wrong version num");
+      fd.rawRead(read_data);
+      if (read_data[0] != VERSION_NUM)
+        throw new Exception("Wrong version num");
       _prefData.load(fd);
-    } catch (Object e) {
+    } catch (Exception e) {
       _prefData.init();
     } finally {
-      if (fd.isOpen())
-        fd.close();
+      fd.close();
     }
   }
 
   public void save() {
-    auto File fd = new File;
-    fd.create(PREF_FILE);
-    fd.write(VERSION_NUM);
-    _prefData.save(fd);
-    fd.close();
+    scope File fd;
+    try {
+      fd.open(PREF_FILE, "wb");
+      int write_data[1] = [VERSION_NUM];
+      fd.rawWrite(write_data);
+      _prefData.save(fd);
+    } finally {
+      fd.close();
+    }
   }
 
   public PrefData prefData() {
@@ -59,7 +62,7 @@ public class PrefData {
 
   public this() {
     gradeData = new GradeData[Ship.GRADE_NUM];
-    foreach (inout GradeData gd; gradeData)
+    foreach (ref GradeData gd; gradeData)
       gd = new GradeData;
   }
 
@@ -73,15 +76,17 @@ public class PrefData {
   public void load(File fd) {
     foreach (GradeData gd; gradeData)
       gd.load(fd);
-    fd.read(_selectedGrade);
-    fd.read(_selectedLevel);
+    int read_data[2];
+    fd.rawRead(read_data);
+    _selectedGrade = read_data[0];
+    _selectedLevel = read_data[1];
   }
 
   public void save(File fd) {
     foreach (GradeData gd; gradeData)
       gd.save(fd);
-    fd.write(_selectedGrade);
-    fd.write(_selectedLevel);
+    int write_data[2] = [_selectedGrade, _selectedLevel];
+    fd.rawWrite(write_data);
   }
 
   public void recordStartGame(int gd, int lv) {
@@ -132,16 +137,16 @@ public class GradeData {
   }
 
   public void load(File fd) {
-    fd.read(reachedLevel);
-    fd.read(hiScore);
-    fd.read(startLevel);
-    fd.read(endLevel);
+    int read_data[4];
+    fd.rawRead(read_data);
+    reachedLevel = read_data[0];
+    hiScore = read_data[1];
+    startLevel = read_data[2];
+    endLevel = read_data[3];
   }
 
   public void save(File fd) {
-    fd.write(reachedLevel);
-    fd.write(hiScore);
-    fd.write(startLevel);
-    fd.write(endLevel);
+    int write_data[4] = [reachedLevel, hiScore, startLevel, endLevel];
+    fd.rawWrite(write_data);
   }
 }

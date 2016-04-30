@@ -28,7 +28,7 @@ public class Bullet {
   BulletMLRunner* runner;
   float _rank;
 
-  public static this() {
+  public static void initRand() {
     rand = new Rand;
   }
 
@@ -77,7 +77,7 @@ public class Bullet {
     this.runner = runner;
   }
 
-  public void set(BulletMLRunner* runner, 
+  public void set(BulletMLRunner* runner,
 		  float x, float y, float deg, float speed, float rank) {
     set(x, y, deg, speed, rank);
     setRunner(runner);

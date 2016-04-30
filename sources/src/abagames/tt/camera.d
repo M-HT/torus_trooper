@@ -74,6 +74,8 @@ public class Camera {
         zoomTrg = 1.0f + rand.nextSignedFloat(0.25f);
         _zoom = 0.2f + rand.nextFloat(0.8f);
         break;
+      default:
+        break;
       }
       _cameraPos.x = cameraTrg.x;
       _cameraPos.y = cameraTrg.y;
@@ -111,6 +113,8 @@ public class Camera {
       while (od < -PI)
         od += PI * 2;
       _deg += od * 0.2f;
+      break;
+    default:
       break;
     }
     cox -= cameraPos.x;
@@ -155,10 +159,10 @@ public class Camera {
     moveCnt--;
     if (moveCnt < 0) {
       moveCnt = 15 + rand.nextInt(15);
-      float lox = fabs(_lookAtPos.x - _cameraPos.x);
-      if (lox > PI)
-        lox = PI * 2 - lox;
-      float ofs = lox * 3 + fabs(_lookAtPos.y - _cameraPos.y);
+      float lox2 = fabs(_lookAtPos.x - _cameraPos.x);
+      if (lox2 > PI)
+        lox2 = PI * 2 - lox2;
+      float ofs = lox2 * 3 + fabs(_lookAtPos.y - _cameraPos.y);
       zoomTrg = 3.0f / ofs;
       if (zoomTrg < zoomMin)
         zoomTrg = zoomMin;

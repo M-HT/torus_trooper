@@ -7,6 +7,7 @@ module abagames.tt.shot;
 
 private import std.math;
 private import std.string;
+private import std.conv;
 private import opengl;
 private import abagames.util.actor;
 private import abagames.util.vector;
@@ -179,7 +180,7 @@ public class Shot: Actor {
       else if (sc >= 2000)
         size = 0.7;
       size *= (1 + multiplier * 0.01f);
-      fl.set("X" ~ std.string.toString(multiplier), pos, size * pos.y,
+      fl.set("X" ~ to!string(multiplier), pos, size * pos.y,
              cast(int) (30 + multiplier * 0.3f));
     }
     if (chargeShot) {

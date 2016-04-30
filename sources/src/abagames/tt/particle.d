@@ -42,7 +42,7 @@ public class Particle: LuminousActor {
   float d1, d2, md1, md2;
   float width, height;
 
-  public static this() {
+  public static void initRand() {
     rand = new Rand;
   }
 
@@ -176,6 +176,8 @@ public class Particle: LuminousActor {
       break;
     case PType.FRAGMENT:
       drawFragment();
+      break;
+    default:
       break;
     }
   }

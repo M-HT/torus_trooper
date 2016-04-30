@@ -112,7 +112,7 @@ public class BulletActorPool: ActorPool!(BulletActor), BulletsManager {
     cnt++;
   }
 
-  public void draw() {
+  public override void draw() {
     foreach (BulletActor ba; actor)
       if (ba.exists)
         ba.draw();
@@ -146,7 +146,7 @@ public class BulletActorPool: ActorPool!(BulletActor), BulletsManager {
       if (ba.exists)
         ba.checkShotHit(pos, shape, shot);
   }
-  
+
   public static void registFunctions(BulletMLRunner* runner) {
     BulletMLRunner_set_getBulletDirection(runner, &getBulletDirection_);
     BulletMLRunner_set_getAimDirection(runner, &getAimDirectionWithRev_);

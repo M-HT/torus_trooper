@@ -25,11 +25,11 @@ public class FloatLetter: Actor {
   float mx, my;
   float d;
   float size;
-  char[] msg;
+  string msg;
   int cnt;
   float alpha;
 
-  public static this() {
+  public static void initRand() {
     rand = new Rand;
   }
 
@@ -42,7 +42,7 @@ public class FloatLetter: Actor {
     pos = new Vector3;
   }
 
-  public void set(char[] m, Vector p, float s, int c = 120) {
+  public void set(string m, Vector p, float s, int c = 120) {
     pos.x = p.x;
     pos.y = p.y;
     pos.z = 1;

@@ -16,7 +16,7 @@ private import abagames.util.sdl.sound;
  */
 public class SoundManager: abagames.util.sdl.sound.SoundManager {
  private static:
-  char[][] seFileName =
+  string[] seFileName =
     ["shot.wav", "charge.wav", "charge_shot.wav", "hit.wav",
      "small_dest.wav", "middle_dest.wav", "boss_dest.wav",
      "myship_dest.wav", "extend.wav", "timeup_beep.wav"];
@@ -26,7 +26,7 @@ public class SoundManager: abagames.util.sdl.sound.SoundManager {
      5, 6, 7];
   Rand rand;
   Music[] bgm;
-  Chunk[char[]] se;
+  Chunk[string] se;
   int prevBgmIdx;
   int nextIdxMv;
   bool seDisabled = false;
@@ -44,23 +44,24 @@ public class SoundManager: abagames.util.sdl.sound.SoundManager {
 
   private static Music[] loadMusics() {
     Music[] musics;
-    char[][] files = listdir(Music.dir);
-    foreach (char[] fileName; files) {
-      char[] ext = getExt(fileName);
-      if (ext != "ogg" && ext != "wav")
+    auto files = dirEntries(Music.dir, SpanMode.shallow);
+    foreach (string fileName; files) {
+      string ext = extension(fileName);
+      if (ext != ".ogg" && ext != ".wav")
         continue;
+      string fileBaseName = baseName(fileName);
       Music music = new Music();
-      music.load(fileName);
+      music.load(fileBaseName);
       musics ~= music;
-      Logger.info("Load bgm: " ~ fileName);
+      Logger.info("Load bgm: " ~ fileBaseName);
     }
     return musics;
   }
 
-  private static Chunk[char[]] loadChunks() {
-    Chunk[char[]] chunks;
+  private static Chunk[string] loadChunks() {
+    Chunk[string] chunks;
     int i = 0;
-    foreach (char[] fileName; seFileName) {
+    foreach (string fileName; seFileName) {
       Chunk chunk = new Chunk();
       chunk.load(fileName, seChannel[i]);
       chunks[fileName] = chunk;
@@ -71,7 +72,7 @@ public class SoundManager: abagames.util.sdl.sound.SoundManager {
   }
 
   public static void playBgm() {
-    int bgmIdx = rand.nextInt(bgm.length);
+    int bgmIdx = rand.nextInt(cast(int)(bgm.length));
     nextIdxMv = rand.nextInt(2) * 2 - 1;
     if (bgmIdx == prevBgmIdx) {
       bgmIdx++;
@@ -85,7 +86,7 @@ public class SoundManager: abagames.util.sdl.sound.SoundManager {
   public static void nextBgm() {
     int bgmIdx = prevBgmIdx + nextIdxMv;
     if (bgmIdx < 0)
-      bgmIdx = bgm.length - 1;
+      bgmIdx = cast(int)(bgm.length - 1);
     else if (bgmIdx >= bgm.length)
         bgmIdx = 0;
     prevBgmIdx = bgmIdx;
@@ -100,7 +101,7 @@ public class SoundManager: abagames.util.sdl.sound.SoundManager {
     Music.haltMusic();
   }
 
-  public static void playSe(char[] name) {
+  public static void playSe(string name) {
     if (seDisabled)
       return;
     se[name].play();

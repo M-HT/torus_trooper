@@ -57,7 +57,7 @@ public class Enemy: Actor {
   bool passed;
   EnemyPool passedEnemies;
 
-  public static this() {
+  public static void initRand() {
     rand = new Rand;
   }
 

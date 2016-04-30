@@ -5,7 +5,7 @@
  */
 module abagames.util.sdl.recordablepad;
 
-private import std.stream;
+private import std.stdio;
 private import abagames.util.iterator;
 private import abagames.util.sdl.pad;
 
@@ -89,23 +89,26 @@ public class PadRecord {
   }
 
   public void save(File fd) {
-    fd.write(record.length);
+    int write_data[1] = [cast(int)(record.length)];
+    int write_data2[2];
+    fd.rawWrite(write_data);
     foreach (Record r; record) {
-      fd.write(r.series);
-      fd.write(r.data);
+      write_data2[0] = r.series;
+      write_data2[1] = r.data;
+      fd.rawWrite(write_data2);
     }
   }
 
   public void load(File fd) {
     clear();
-    int l, s, d;
-    fd.read(l);
-    for (int i = 0; i < l; i++) {
-      fd.read(s);
-      fd.read(d);
+    int read_data[1];
+    int read_data2[2];
+    fd.rawRead(read_data);
+    for (int i = 0; i < read_data[0]; i++) {
+      fd.rawRead(read_data2);
       Record r;
-      r.series = s;
-      r.data = d;
+      r.series = read_data2[0];
+      r.data = read_data2[1];
       record ~= r;
     }
   }
