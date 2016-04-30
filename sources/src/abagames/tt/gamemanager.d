@@ -635,7 +635,7 @@ public class TitleState: GameState {
       float rcr = titleManager.replayChangeRatio * 2.4f;
       if (rcr > 1)
         rcr = 1;
-      glViewport(0, 0,
+      glViewport(Screen.startx, Screen.starty,
                  cast(int) (Screen.width / 4 * (3 + rcr)),
                  Screen.height);
       glEnable(GL_CULL_FACE);
@@ -654,7 +654,7 @@ public class TitleState: GameState {
       glEnable(GL_BLEND);
       shots.draw();
     }
-    glViewport(0, 0, Screen.width, Screen.height);
+    glViewport(Screen.startx, Screen.starty, Screen.width, Screen.height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glFrustum(-Screen.nearPlane,
