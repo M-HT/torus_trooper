@@ -7,7 +7,7 @@ module abagames.tt.gamemanager;
 
 private import std.math;
 private import opengl;
-private import SDL;
+private import bindbc.sdl;
 private import bulletml;
 private import abagames.util.vector;
 private import abagames.util.rand;
@@ -175,7 +175,7 @@ public class GameManager: abagames.util.sdl.gamemanager.GameManager {
   }
 
   public override void move() {
-    if (pad.keys[SDLK_ESCAPE] == SDL_PRESSED) {
+    if (pad.keys[SDL_SCANCODE_ESCAPE] == SDL_PRESSED) {
       if (!escPressed) {
         escPressed = true;
         if (state == inGameState) {
@@ -192,12 +192,6 @@ public class GameManager: abagames.util.sdl.gamemanager.GameManager {
   }
 
   public override void draw() {
-    SDL_Event e = mainLoop.event;
-    if (e.type == SDL_VIDEORESIZE) {
-      SDL_ResizeEvent re = e.resize;
-      if (re.w > 150 && re.h > 100)
-        screen.resized(re.w, re.h);
-    }
     if (screen.startRenderToLuminousScreen()) {
       glPushMatrix();
       ship.setEyepos();
@@ -369,7 +363,7 @@ public class InGameState: GameState {
   }
 
   public override void move() {
-    if (pad.keys[SDLK_p] == SDL_PRESSED) {
+    if (pad.keys[SDL_SCANCODE_P] == SDL_PRESSED) {
       if (!pausePressed) {
         if (pauseCnt <= 0 && !ship.isGameOver)
           pauseCnt = 1;
@@ -635,9 +629,9 @@ public class TitleState: GameState {
       float rcr = titleManager.replayChangeRatio * 2.4f;
       if (rcr > 1)
         rcr = 1;
-      glViewport(Screen.startx, Screen.starty,
-                 cast(int) (Screen.width / 4 * (3 + rcr)),
-                 Screen.height);
+      glViewport(Screen.screenStartX, Screen.screenStartY,
+                 cast(int) (Screen.screenWidth / 4 * (3 + rcr)),
+                 Screen.screenHeight);
       glEnable(GL_CULL_FACE);
       tunnel.draw();
       tunnel.drawBackward();
@@ -654,7 +648,7 @@ public class TitleState: GameState {
       glEnable(GL_BLEND);
       shots.draw();
     }
-    glViewport(Screen.startx, Screen.starty, Screen.width, Screen.height);
+    glViewport(Screen.screenStartX, Screen.screenStartY, Screen.screenWidth, Screen.screenHeight);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glFrustum(-Screen.nearPlane,

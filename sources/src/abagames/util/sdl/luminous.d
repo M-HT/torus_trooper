@@ -10,6 +10,7 @@ private import std.string;
 private import core.stdc.string;
 private import opengl;
 private import abagames.util.actor;
+private import abagames.util.sdl.screen3d;
 
 /**
  * Luminous effect texture.
@@ -21,14 +22,14 @@ public class LuminousScreen {
   const int LUMINOUS_TEXTURE_HEIGHT_MAX = 64;
   GLuint[LUMINOUS_TEXTURE_WIDTH_MAX * LUMINOUS_TEXTURE_HEIGHT_MAX * 4 * uint.sizeof] td;
   int luminousTextureWidth = 64, luminousTextureHeight = 64;
-  int screenStartx, screenStarty, screenWidth, screenHeight;
+  int screenWidth, screenHeight;
   float luminous;
+  Screen3D screen;
 
-  public void init(float luminous, int startx, int starty, int width, int height) {
+  public void init(float luminous, int width, int height, Screen3D screen) {
     makeLuminousTexture();
     this.luminous = luminous;
-    screenStartx = startx;
-    screenStarty = starty;
+    this.screen = screen;
     resized(width, height);
   }
 
@@ -61,7 +62,7 @@ public class LuminousScreen {
     glBindTexture(GL_TEXTURE_2D, luminousTexture);
     glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
 		     0, 0, luminousTextureWidth, luminousTextureHeight, 0);
-    glViewport(screenStartx, screenStarty, screenWidth, screenHeight);
+    glViewport(screen.screenStartX, screen.screenStartY, screen.screenWidth, screen.screenHeight);
   }
 
   private void viewOrtho() {
