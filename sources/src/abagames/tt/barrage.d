@@ -92,7 +92,7 @@ public class Barrage {
  */
 public class BarrageManager {
  private:
-  static BulletMLParserTinyXML *parser[string][string];
+  static BulletMLParserTinyXML*[string][string] parser;
   static string BARRAGE_DIR_NAME = "barrage";
 
   public static void load() {
@@ -110,7 +110,7 @@ public class BarrageManager {
   }
 
   public static BulletMLParserTinyXML* getInstance(string dirName, string fileName) {
-    if (!parser[dirName][fileName]) {
+    if (!(dirName in parser) || !(fileName in parser[dirName]) || !parser[dirName][fileName]) {
       string barrageName = dirName ~ "/" ~ fileName;
       Logger.info("Load BulletML: " ~ barrageName);
       parser[dirName][fileName] =
@@ -121,7 +121,7 @@ public class BarrageManager {
   }
 
   public static BulletMLParserTinyXML*[] getInstanceList(string dirName) {
-    BulletMLParserTinyXML *pl[];
+    BulletMLParserTinyXML*[] pl;
     foreach (BulletMLParserTinyXML *p; parser[dirName]) {
       pl ~= p;
     }
@@ -129,7 +129,7 @@ public class BarrageManager {
   }
 
   public static void unload() {
-    foreach (BulletMLParserTinyXML *pa[string]; parser) {
+    foreach (BulletMLParserTinyXML*[string] pa; parser) {
       foreach (BulletMLParserTinyXML *p; pa) {
         BulletMLParserTinyXML_delete(p);
       }

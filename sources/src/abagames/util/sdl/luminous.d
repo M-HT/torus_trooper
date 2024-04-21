@@ -7,7 +7,7 @@ module abagames.util.sdl.luminous;
 
 private import std.math;
 private import std.string;
-private import std.c.string;
+private import core.stdc.string;
 private import opengl;
 private import abagames.util.actor;
 
@@ -19,7 +19,7 @@ public class LuminousScreen {
   GLuint luminousTexture;
   const int LUMINOUS_TEXTURE_WIDTH_MAX = 64;
   const int LUMINOUS_TEXTURE_HEIGHT_MAX = 64;
-  GLuint td[LUMINOUS_TEXTURE_WIDTH_MAX * LUMINOUS_TEXTURE_HEIGHT_MAX * 4 * uint.sizeof];
+  GLuint[LUMINOUS_TEXTURE_WIDTH_MAX * LUMINOUS_TEXTURE_HEIGHT_MAX * 4 * uint.sizeof] td;
   int luminousTextureWidth = 64, luminousTextureHeight = 64;
   int screenStartx, screenStarty, screenWidth, screenHeight;
   float luminous;
@@ -38,7 +38,7 @@ public class LuminousScreen {
     memset(data, 0, luminousTextureWidth * luminousTextureHeight * 4 * uint.sizeof);
     glGenTextures(1, &luminousTexture);
     glBindTexture(GL_TEXTURE_2D, luminousTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, 4, luminousTextureWidth, luminousTextureHeight, 0,
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, luminousTextureWidth, luminousTextureHeight, 0,
 		 GL_RGBA, GL_UNSIGNED_BYTE, data);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -59,7 +59,7 @@ public class LuminousScreen {
 
   public void endRender() {
     glBindTexture(GL_TEXTURE_2D, luminousTexture);
-    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
 		     0, 0, luminousTextureWidth, luminousTextureHeight, 0);
     glViewport(screenStartx, screenStarty, screenWidth, screenHeight);
   }
@@ -81,9 +81,9 @@ public class LuminousScreen {
     glPopMatrix();
   }
 
-  //private int lmOfs[5][2] = [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1]];
+  //private int[2][5] lmOfs = [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1]];
   //private const float lmOfsBs = 5;
-  private float lmOfs[2][2] = [[-2, -1], [2, 1]];
+  private float[2][2] lmOfs = [[-2, -1], [2, 1]];
   private const float lmOfsBs = 3;
 
   public void draw() {

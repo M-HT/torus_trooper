@@ -24,10 +24,10 @@ public class ReplayData {
   public void save(string fileName) {
     scope File fd;
     fd.open(dir ~ "/" ~ fileName, "wb");
-    int write_data[1] = [VERSION_NUM];
-    float write_data2[1] = [level];
-    int write_data3[1] = [grade];
-    long write_data4[1] = [seed];
+    int[1] write_data = [VERSION_NUM];
+    float[1] write_data2 = [level];
+    int[1] write_data3 = [grade];
+    long[1] write_data4 = [seed];
     fd.rawWrite(write_data);
     fd.rawWrite(write_data2);
     fd.rawWrite(write_data3);
@@ -39,13 +39,13 @@ public class ReplayData {
   public void load(string fileName) {
     scope File fd;
     fd.open(dir ~ "/" ~ fileName);
-    int read_data[1];
+    int[1] read_data;
     fd.rawRead(read_data);
     if (read_data[0] != VERSION_NUM)
       throw new Exception("Wrong version num");
-    float read_data2[1];
-    int read_data3[1];
-    long read_data4[1];
+    float[1] read_data2;
+    int[1] read_data3;
+    long[1] read_data4;
     fd.rawRead(read_data2);
     fd.rawRead(read_data3);
     fd.rawRead(read_data4);

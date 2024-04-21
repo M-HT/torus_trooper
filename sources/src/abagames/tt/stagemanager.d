@@ -452,7 +452,7 @@ public class ShipSpec {
           pi = cast(int)(ps.length - 1);
       }
       br.addBml(ps[pi], morphRank, true, speedRank);
-      delete ps[pi];
+      destroy(ps[pi]);
       psn--;
     }
     return br;

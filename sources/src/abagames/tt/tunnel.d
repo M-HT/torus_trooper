@@ -297,7 +297,7 @@ public class Tunnel {
       idx = cast(int)(slice.length - 2);
       ofs = 0.99;
     }
-    if (ofs !>= 0)
+    if (std.math.isNaN(ofs) || ofs < 0)
       ofs = 0;
     else if (ofs >= 1)
       ofs = 0.99;
@@ -319,7 +319,7 @@ public class Tunnel {
       idx = cast(int)(sliceBackward.length - 2);
       ofs = 0.99;
     }
-    if (ofs !>= 0)
+    if (std.math.isNaN(ofs) || ofs < 0)
       ofs = 0;
     else if (ofs >= 1)
       ofs = 0.99;

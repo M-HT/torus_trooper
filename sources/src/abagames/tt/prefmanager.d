@@ -25,7 +25,7 @@ public class PrefManager: abagames.util.prefmanager.PrefManager {
   public void load() {
     scope File fd;
     try {
-      int read_data[1];
+      int[1] read_data;
       fd.open(PREF_FILE);
       fd.rawRead(read_data);
       if (read_data[0] != VERSION_NUM)
@@ -42,7 +42,7 @@ public class PrefManager: abagames.util.prefmanager.PrefManager {
     scope File fd;
     try {
       fd.open(PREF_FILE, "wb");
-      int write_data[1] = [VERSION_NUM];
+      int[1] write_data = [VERSION_NUM];
       fd.rawWrite(write_data);
       _prefData.save(fd);
     } finally {
@@ -76,7 +76,7 @@ public class PrefData {
   public void load(File fd) {
     foreach (GradeData gd; gradeData)
       gd.load(fd);
-    int read_data[2];
+    int[2] read_data;
     fd.rawRead(read_data);
     _selectedGrade = read_data[0];
     _selectedLevel = read_data[1];
@@ -85,7 +85,7 @@ public class PrefData {
   public void save(File fd) {
     foreach (GradeData gd; gradeData)
       gd.save(fd);
-    int write_data[2] = [_selectedGrade, _selectedLevel];
+    int[2] write_data = [_selectedGrade, _selectedLevel];
     fd.rawWrite(write_data);
   }
 
@@ -137,7 +137,7 @@ public class GradeData {
   }
 
   public void load(File fd) {
-    int read_data[4];
+    int[4] read_data;
     fd.rawRead(read_data);
     reachedLevel = read_data[0];
     hiScore = read_data[1];
@@ -146,7 +146,7 @@ public class GradeData {
   }
 
   public void save(File fd) {
-    int write_data[4] = [reachedLevel, hiScore, startLevel, endLevel];
+    int[4] write_data = [reachedLevel, hiScore, startLevel, endLevel];
     fd.rawWrite(write_data);
   }
 }

@@ -496,7 +496,7 @@ public class InGameState: GameState {
     float es = (cast(int) (stageManager.level * 0.5) + 10) * DEFAULT_EXTEND_SCORE / 10;
     if (es > MAX_EXTEND_SCORE)
       es = MAX_EXTEND_SCORE;
-    nextExtend += es;
+    nextExtend += cast(int)es;
   }
 
   private void extendShip() {

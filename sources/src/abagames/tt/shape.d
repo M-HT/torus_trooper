@@ -447,8 +447,8 @@ public class Structure {
       for (int i = 0; i < divNum; i++) {
         float x1 = -0.5 + (1.0 / divNum) * i;
         float x2 = x1 + (1.0 / divNum) * 0.8;
-        float y1 = -0.5 + (1.0 / divNum) * fabs(i - divNum / 2) * 2;
-        float y2 = -0.5 + (1.0 / divNum) * fabs(i + 0.8 - divNum / 2) * 2;
+        float y1 = -0.5 + (1.0 / divNum) * fabs(i - cast(float)divNum / 2) * 2;
+        float y2 = -0.5 + (1.0 / divNum) * fabs(i + 0.8 - cast(float)divNum / 2) * 2;
         glBegin(GL_LINE_LOOP);
         glVertex3f(x1, 0, y1);
         glVertex3f(x2, 0, y2);
